@@ -1,22 +1,24 @@
 <?php 
 include 'dbconnect.php';
 
+$username_err = '';
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
  
 	//FillIn SQL with the Bind params :USERNAME
-	$SQL = $connection->prepare('');
-	$SQL->bindParam(':USERNAME', $_POST[username], PDO::PARAM_STR);
+	$SQL = $connection->prepare('SELECT id, username, password FROM users WHERE `username` = :USERNAME');
+	$SQL->bindParam(':USERNAME', $_POST['username'], PDO::PARAM_STR);
 	$SQL->execute();
-	$result = $SQL->fetch();       
-	if($result[username]) {
-		  if(password_verify($_POST[password], $result[password])){
+	$result = $SQL->fetch();
+	if($result['username']) {
+		  if(password_verify($_POST['password'], $result['password'])){
                             // Password is correct, so start a new session
-                            
+                            session_start();
                             // Store data in session variables
-                            $_SESSION["loggedin"] = 
-                         
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION['id'] = $result['id'];
+                            $_SESSION['username'] = $result['username'];
                            
                             // Redirect user to welcome page
                             header("location: list.php");		
@@ -26,7 +28,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $password_err = "The password you entered was not valid.";
                         }
 
-}
+} else {
+	    $username_err = 'Username does not exist';
+    }
 }
 include 'header.php';
 
@@ -37,6 +41,7 @@ include 'header.php';
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" name="username" class="form-control" value="">
+                <h5 style="color: red"><?php echo $username_err; ?></h5>
             </div>    
             <div class="form-group">
                 <label>Password</label>
