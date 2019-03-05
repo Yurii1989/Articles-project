@@ -11,17 +11,15 @@ $SQL->setFetchMode(PDO::FETCH_ASSOC);
 //print_r($SQL->rowCount());
 $result = $SQL->fetchAll();
 
-var_dump($result);
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true) echo "<div class='row'><p><a href='new.php'>new.php</a></p></div>";
+//var_dump($result);
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true) echo "<button type=\"button\" class='btn btn-success'><p><a href='new.php'>Create new article</a></p></button>";
 $abc = [];
-for ($count = 0; $count < count($result); $count++) { 
-	echo "<div class='row'>";
+for ($count = 0; $count < count($result); $count++) {
   
 	if(is_array($result[$count]) == true ) {
-        echo "<a href='view.php?id=".$result[$count]['id']."'>"."<h2>".$result[$count]['title']."</h2></a>"."<img src='".$result[$count]['img']."'>".
-        "<p>".$result[$count]['description']."</p>";
+        echo "<article class='wrapper'><a href='view.php?id=".$result[$count]['id']."'>"."<h2>".$result[$count]['title']."</h2></a>"."<img src='".$result[$count]['img']."'>".
+        "<p>".$result[$count]['description']."</p></article>";
 	}
-	echo "</div>";
 }
 ?>
 

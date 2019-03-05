@@ -9,8 +9,32 @@ if($_SESSION["loggedin"] == true) {
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 //AddToDB //////////////////////////////////////
+        $SQL = $connection->prepare('UPDATE article SET
+        img = :img,
+        title = :title,
+        pub_date = :time,
+        description = :descr WHERE id = :Id');
+        if(!empty($_FILES['image']['name'])) {
+            $imageResult = ProcessUploadedFile($_FILES);
+            $SQL->bindParam(':img', $imageResult,PDO::PARAM_STR);
+        } else {
+            $SQL = $connection->prepare('UPDATE article SET
+            title = :title,
+            pub_date = :time,
+            description = :descr WHERE id = :Id');
+            $abc = GetFromDBWithId($_POST['id'],$connection);
+        }
 
-//ProcessFile
+        $SQL->bindParam(':title', $_POST['title'], PDO::PARAM_STR);
+        $newTime = new DateTime();
+        $date = $newTime->format('Y-m-d H:i:s');
+        $SQL->bindParam(':time', $date, PDO::PARAM_STR);
+        $SQL->bindParam(':descr', $_POST['description'], PDO::PARAM_STR);
+        $SQL->bindParam(':Id', $_POST['id'], PDO::PARAM_INT);
+	    $SQL->execute();
+	    $updatedDB = $SQL->fetchAll();
+	    print_r($updatedDB);
+
 		
 		
 if($SQL->execute()) {
@@ -29,7 +53,7 @@ else {
 include 'header.php';
 
 
-$result = GetFromDBWithId($_GET[id],$connection);
+$result = GetFromDBWithId($_GET['id'],$connection);
 var_dump($result);
 ?>
 		<form method="POST" action="edit.php" enctype="multipart/form-data">

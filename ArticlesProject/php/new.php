@@ -10,12 +10,12 @@ if($_SESSION["loggedin"] == true) {
 
 
 		//FillIn SQL with the Bind params :TITLE :DESCRIPTION :IMG
-		$SQL = $connection->prepare('');
-		$SQL->bindParam(':TITLE', $_POST[title], PDO::PARAM_STR);
-		$SQL->bindParam(':DESCRIPTION', $_POST[description], PDO::PARAM_STR);
+		$SQL = $connection->prepare('INSERT INTO article(title, img, description) VALUES (:TITLE, :IMG, :DESCRIPTION)');
+		$SQL->bindParam(':TITLE', $_POST['title'], PDO::PARAM_STR);
+		$SQL->bindParam(':DESCRIPTION', $_POST['description'], PDO::PARAM_STR);
 		
-		if(!empty($_FILES[image])) {
-			$FileNameToDB = ProcessUploadedFile($_FILES[image]);
+		if(!empty($_FILES['image'])) {
+			$FileNameToDB = ProcessUploadedFile($_FILES);
 			$SQL->bindParam(':IMG', $FileNameToDB, PDO::PARAM_STR);
 		}
 		
