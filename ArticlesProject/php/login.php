@@ -49,6 +49,7 @@ include 'header.php';
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
+                <a href="register.php">Register</a>
             </div>
         </form>
     </div>    

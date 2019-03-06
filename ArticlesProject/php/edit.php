@@ -54,7 +54,7 @@ include 'header.php';
 
 
 $result = GetFromDBWithId($_GET['id'],$connection);
-var_dump($result);
+//var_dump($result);
 ?>
 		<form method="POST" action="edit.php" enctype="multipart/form-data">
 		    <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?? ''; ?>"
@@ -82,6 +82,7 @@ var_dump($result);
 
 	
 	}
+
 	
 
 
