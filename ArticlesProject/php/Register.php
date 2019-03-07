@@ -8,33 +8,43 @@ $password_err = '';
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-    foreach ($_POST as $key => $value) {
-        if (empty($_POST[$key])) {
-            $errorMessage = "Blya";
+    //foreach ($_POST as $key => $value) {
+        if (empty($_POST['username'])) {
+            $errorMessage = "You forgot to type Username";
+            echo $errorMessage;
+        } else if (empty($_POST['password'])) {
+            $errorMessage = "You forgot to type Password";
+            echo $errorMessage;
+        } else if (empty($_POST['confirm_password'])) {
+            $errorMessage = "You forgot to confirm Password";
             echo $errorMessage;
         }
-    }
-    if ($_POST['password'] != $_POST['confirm_password']) {
-        $errorMessage = "Blya should be Blya";
-        echo $errorMessage;
-    }
+            else {
 
-    //FillIn SQL with the Bind params :USERNAME
-    $SQL = $connection->prepare('INSERT INTO users (username, password) VALUES (:USERNAME, :PASSWORD)');
-    $password = $_POST['password'];
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-    $SQL->bindParam(':USERNAME', $_POST['username'], PDO::PARAM_STR);
-    $SQL->bindParam(':PASSWORD', $hash, PDO::PARAM_STR);
-    $SQL->execute();
+            if ($_POST['password'] != $_POST['confirm_password']) {
+                $errorMessage = "Password does not match Confirm Password";
+                echo $errorMessage;
+            } else {
+                $reader = "reader";
+                //FillIn SQL with the Bind params :USERNAME
+                $SQL = $connection->prepare('INSERT INTO users (username, password, role) VALUES (:USERNAME, :PASSWORD, :USERROLE)');
+                $password = $_POST['password'];
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $SQL->bindParam(':USERNAME', $_POST['username'], PDO::PARAM_STR);
+                $SQL->bindParam(':PASSWORD', $hash, PDO::PARAM_STR);
+                $SQL->bindParam(':USERROLE', $reader, PDO::PARAM_STR);
+                $SQL->execute();
 
-    session_start();
-    $_SESSION["loggedin"] = true;
-    $_SESSION['id'] = $result['id'];
-    $_SESSION['username'] = $result['username'];
-    header('Location: list.php');
+                session_start();
+                $_SESSION["loggedin"] = true;
+                $_SESSION['username'] = $result['username'];
+                $_SESSION['role'] = $reader;
+                header('Location: list.php');
+            }
+            include 'header.php';
+        }
+
 }
-include 'header.php';
-
 ?>
     <div class="wrapper">
         <h2>Register</h2>
@@ -54,7 +64,7 @@ include 'header.php';
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="REGISTER">
-                <a href="login.php">Go back to login page</a>
+                <div class="links"><a href="login.php"><< Go back to login page</a></div>
             </div>
         </form>
     </div>

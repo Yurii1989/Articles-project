@@ -16,8 +16,11 @@ for ($count = 0; $count < count($result); $count++) {
         echo "<h2>".$result[$count]['title']."</h2>"."<img src='".$result[$count]['img']."'>".
             "<p>".$result[$count]['description']."</p>";
 	}
-	if($_SESSION["loggedin"] == true) echo "<p><a href='edit.php?id=".$result[$count]['id']."'</a> edit this article </p>
-                                            <p><a href='list.php'</a> go back to the list </p>";
+	if($_SESSION["loggedin"] == true)
+        if ($_SESSION['role'] === 'content_editor') {
+            echo "<p><a href='edit.php?id=".$result[$count]['id']."'</a> edit this article </p>";
+        }
+	echo "<p><a href='list.php'</a> go back to the list </p>";
 }
 
 echo "</div class='row'>";

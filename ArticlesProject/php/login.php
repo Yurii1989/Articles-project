@@ -1,13 +1,12 @@
 <?php 
 include 'dbconnect.php';
-
 $username_err = '';
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
  
 	//FillIn SQL with the Bind params :USERNAME
-	$SQL = $connection->prepare('SELECT id, username, password FROM users WHERE `username` = :USERNAME');
+	$SQL = $connection->prepare('SELECT id, username, password, role FROM users WHERE `username` = :USERNAME');
 	$SQL->bindParam(':USERNAME', $_POST['username'], PDO::PARAM_STR);
 	$SQL->execute();
 	$result = $SQL->fetch();
@@ -19,9 +18,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["loggedin"] = true;
                             $_SESSION['id'] = $result['id'];
                             $_SESSION['username'] = $result['username'];
-                           
+                            $_SESSION['role'] = $result['role'];
                             // Redirect user to welcome page
-                            header("location: list.php");		
+                            if ($_SESSION['role'] === 'admin') {
+                                header("location: admin.php");
+                            } else {
+                                header("location: list.php");
+                            }
 						}
 	                     else {
                             // Display an error message if password is not valid
@@ -49,7 +52,7 @@ include 'header.php';
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
-                <a href="register.php">Register</a>
+                <div class="links"><a href="register.php">Register</a></div>
             </div>
         </form>
     </div>    
