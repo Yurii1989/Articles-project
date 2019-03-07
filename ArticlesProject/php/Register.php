@@ -46,7 +46,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 ?>
-    <div class="wrapper">
+<body class="imgview" style="height: 1000px;" background="https://loremflickr.com/1200/700?random">
+<div style="width: 50%;" class="bgtext">
         <h2>Register</h2>
         <form action="" method="post">
             <div class="form-group">

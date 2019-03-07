@@ -18,6 +18,7 @@ if (!isset($_POST['submit'])) {
 </form>
 
 <?php
+    echo "<p><a href='list.php'</a> go back to articles </p>";
 } else {
     if (empty($_POST['titletosearch'])) {
         echo "Please enter a title name above<br>

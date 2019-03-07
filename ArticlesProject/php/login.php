@@ -1,5 +1,6 @@
 <?php 
 include 'dbconnect.php';
+include "header.php";
 $username_err = '';
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -38,7 +39,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 include 'header.php';
 
 ?>
-    <div class="wrapper">
+<body class="imgview" style="height: 1000px;" background="https://loremflickr.com/1200/700?random">
+    <div style="width: 50%;" class="bgtext">
         <h2>Login</h2>
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
             <div class="form-group">

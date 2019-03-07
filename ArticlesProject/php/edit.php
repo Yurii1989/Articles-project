@@ -3,6 +3,11 @@ session_start();
 include 'dbconnect.php';
 include 'functions.php';
 
+if ($_SESSION['role'] === 'reader') {
+    echo "You are not allowed to be here<br>";
+    echo "<a href='list.php'>Go back to articles</a>";
+} else {
+
 if($_SESSION["loggedin"] == true) {
 	
 	
@@ -82,6 +87,7 @@ $result = GetFromDBWithId($_GET['id'],$connection);
 
 	
 	}
+}
 
 	
 
