@@ -2,7 +2,10 @@
 session_start();
 include 'dbconnect.php';
 include 'functions.php';
+include 'header.php';
+include 'footer.php';
 
+$idToRemember = $_GET['id'];
 if ($_SESSION['role'] === 'reader') {
     echo "You are not allowed to be here<br>";
     echo "<a href='list.php'>Go back to articles</a>";
@@ -81,6 +84,7 @@ $result = GetFromDBWithId($_GET['id'],$connection);
 		    	<button class="btn btn-default" type="submit">Submit</button>
 			</div>
 		</form>
+        <a href='view.php?id=<?php echo "$idToRemember";?>'><< Go back to the article</a>
 
 <?php
 }

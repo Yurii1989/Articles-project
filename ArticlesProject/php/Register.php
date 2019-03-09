@@ -37,7 +37,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 session_start();
                 $_SESSION["loggedin"] = true;
-                $_SESSION['username'] = $result['username'];
+                $_SESSION['username'] = $_POST['username'];
                 $_SESSION['role'] = $reader;
                 header('Location: list.php');
             }
@@ -46,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 ?>
-<body class="imgview" style="height: 1000px;" background="https://loremflickr.com/1200/700?random">
+<body class="imgview" style="height: 1000px;" background="../storage/jpg.jpg">
 <div style="width: 50%;" class="bgtext">
         <h2>Register</h2>
         <form action="" method="post">

@@ -1,6 +1,7 @@
 <?php 
 include 'dbconnect.php';
 include "header.php";
+$password_err = '';
 $username_err = '';
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -21,6 +22,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION['username'] = $result['username'];
                             $_SESSION['role'] = $result['role'];
                             // Redirect user to welcome page
+                            //In case it's admin send him to admin console
                             if ($_SESSION['role'] === 'admin') {
                                 header("location: admin.php");
                             } else {
@@ -28,18 +30,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             }
 						}
 	                     else {
-                            // Display an error message if password is not valid
-                            $password_err = "The password you entered was not valid.";
+                            // store an error message in variable if password is not valid
+                            $password_err = "The password you entered is not valid.";
                         }
 
 } else {
+        // store an error message in variable if username does not exist
 	    $username_err = 'Username does not exist';
     }
 }
-include 'header.php';
 
 ?>
-<body class="imgview" style="height: 1000px;" background="https://loremflickr.com/1200/700?random">
+<body class="imgview" style="height: 1000px;" background="../storage/jpg.jpg">
     <div style="width: 50%;" class="bgtext">
         <h2>Login</h2>
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
@@ -51,6 +53,7 @@ include 'header.php';
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control">
+                <h5 style="color: red"><?php echo $password_err; ?></h5>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">

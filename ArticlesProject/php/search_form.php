@@ -7,22 +7,23 @@ include "functions.php";
 if (!isset($_POST['submit'])) {
     $Token = CreateToken();
     $_SESSION['token'] = $Token[0];
+    echo "<a href='list.php'</a><p> << Go back to articles </p></a>";
     ?>
 
-<form method="post" action="search_form.php">
-    <label for="titletosearch">Search for particular title: </label>
-    <input type="text" name="titletosearch" class="form-control">
+    <form method="post" action="search_form.php">
+        <label for="titletosearch"><p>Search for particular title: </p></label>
+        <input type="text" name="titletosearch" class="form-control">
     <br/>
-    <input type="hidden" name="token" value="<?php echo $Token[0]; ?>">
-    <input type="submit" name="submit" value="Go" class="btn btn-primary"/>
-</form>
+        <input type="hidden" name="token" value="<?php echo $Token[0]; ?>">
+        <input type="submit" name="submit" value="Go" class="btn btn-primary"/>
+    </form>
 
 <?php
-    echo "<p><a href='list.php'</a> go back to articles </p>";
+
 } else {
     if (empty($_POST['titletosearch'])) {
         echo "Please enter a title name above<br>
-            <p><a href='search_form.php'</a> go back to search </p>";
+            <p><a href='search_form.php'</a><< Go back to search </p>";
     } else {
         //var_dump($_POST['titletosearch']);
         //echo "searching for ".$_POST['titletosearch'];
@@ -38,7 +39,7 @@ if (!isset($_POST['submit'])) {
         //var_dump($result);
         if ($result == []) {
             echo "Nothing found<br>
-            <p><a href='search_form.php'</a> go back to search </p>";
+            <p><a href='search_form.php'</a><< Go back to search </p>";
         } else {
         for ($ArrayIndex = 0; $ArrayIndex < count($result); $ArrayIndex++) {
             echo "Article: ".$result[$ArrayIndex]['title']."<br>

@@ -12,14 +12,12 @@ echo "<h4>Welcome back, ".$_SESSION['username'].".</h4>
         <button type='submit' class='btn btn-primary' name='any'>Logout</button>
        </form>
     <br>";
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['logout'] === '123') {
-    //session_destroy();
+
+//logic for logout
+if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['logout']))) {
     session_unset();
     header("location: login.php");
-
-
-}
-//print_r($_POST);
+    }
 
 if ($_SESSION['role'] === 'admin') {
 $SQL = $connection->prepare('SELECT id, username, role FROM users');
@@ -40,7 +38,7 @@ echo "<table class='table'>
     if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['chosen_role'] !== 'Choose...') {
         print_r($_POST);
         $SQL = $connection->prepare('UPDATE users SET role =:Role WHERE id =:Id');
-        $SQL->bindParam(':Role', $_POST['chosen_role'], PDO::PARAM_INT);
+        $SQL->bindParam(':Role', $_POST['chosen_role'], PDO::PARAM_STR);
         $SQL->bindParam(':Id', $_POST['id'], PDO::PARAM_INT);
         $SQL->execute();
         header("location: admin.php");
@@ -50,9 +48,9 @@ echo "<table class='table'>
         $password = $_POST['password'];
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $SQL = $connection->prepare('INSERT INTO users (username, password, role) VALUES (:NewName, :NewPass, :NewRole)');
-        $SQL->bindParam(':NewRole', $_POST['add_role'], PDO::PARAM_INT);
-        $SQL->bindParam(':NewName', $_POST['add_name'], PDO::PARAM_INT);
-        $SQL->bindParam(':NewPass', $hash, PDO::PARAM_INT);
+        $SQL->bindParam(':NewRole', $_POST['add_role'], PDO::PARAM_STR);
+        $SQL->bindParam(':NewName', $_POST['add_name'], PDO::PARAM_STR);
+        $SQL->bindParam(':NewPass', $hash, PDO::PARAM_STR);
         $SQL->execute();
         header("location: admin.php");
     }
@@ -107,7 +105,7 @@ echo "
                             <option value='reader'>reader</option>
                         </select>
             </div>
-            <button type='submit' class='btn btn-primary' name='add_user'>Add user</button>
+            <button type='submit' class='btn btn-primary'>Add user</button>
         </form>";
 
 }
