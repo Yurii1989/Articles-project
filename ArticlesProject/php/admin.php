@@ -6,24 +6,22 @@ include "header.php";
 if (empty($_SESSION)) {
     echo "Get the hell out from this page";
 } else {
-echo "<h4>Welcome back, ".$_SESSION['username'].".</h4>
+    echo "<h4>Welcome back, ".$_SESSION['username'].".</h4>
     <form method='post'>
-    <input type='hidden' name='logout' value='123'>
+        <input type='hidden' name='logout' value='123'>
         <button type='submit' class='btn btn-primary' name='any'>Logout</button>
-       </form>
+    </form>
     <br>";
 
-//logic for logout
-if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['logout']))) {
-    session_unset();
-    header("location: login.php");
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['logout']))) {
+        session_unset();
+        header("location: login.php");
     }
 
 if ($_SESSION['role'] === 'admin') {
 $SQL = $connection->prepare('SELECT id, username, role FROM users');
 $SQL->execute();
 $result = $SQL->fetchAll();
-//print_r($result);
 
 echo "<table class='table'>
         <thead class='thead-dark'>

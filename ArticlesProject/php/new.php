@@ -4,41 +4,29 @@ include 'dbconnect.php';
 include 'functions.php';
 
 if($_SESSION["loggedin"] == true) {
-	
-	
+
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-
-		//FillIn SQL with the Bind params :TITLE :DESCRIPTION :IMG
 		$SQL = $connection->prepare('INSERT INTO article(title, img, description) VALUES (:TITLE, :IMG, :DESCRIPTION)');
 		$SQL->bindParam(':TITLE', $_POST['title'], PDO::PARAM_STR);
 		$SQL->bindParam(':DESCRIPTION', $_POST['description'], PDO::PARAM_STR);
-		
+
 		if(!empty($_FILES['image'])) {
 			$FileNameToDB = ProcessUploadedFile($_FILES);
 			$SQL->bindParam(':IMG', $FileNameToDB, PDO::PARAM_STR);
 		}
-		
 
-
-if($SQL->execute()) {
-	
-	//var_dump($connection->lastInsertId());
-	header("Location: view.php?id=".$connection->lastInsertId().""); /* Redirect browser */
-}
-else {
-echo "Error in Insert";
-print_r($SQL->errorInfo());
-$SQL->debugDumpParams();
-var_dump($_POST);
-
-}
-
-}
-
-else {
-include 'header.php';
-?>
+        if($SQL->execute()) {
+            header("Location: view.php?id=".$connection->lastInsertId().""); /* Redirect browser */
+        } else {
+            echo "Error in Insert";
+            print_r($SQL->errorInfo());
+            $SQL->debugDumpParams();
+            var_dump($_POST);
+        }
+    } else {
+        include 'header.php';
+        ?>
 		<form method="POST" action="new.php" enctype="multipart/form-data">
 			<div class="form-group">
 			    <label for="title">Tip a title for your project</label>
@@ -59,10 +47,8 @@ include 'header.php';
 			</div>
 		</form>
 
-<?php
-}
-
-	
+        <?php
+    }
 }
 	
 

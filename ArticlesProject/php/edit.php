@@ -15,8 +15,6 @@ if($_SESSION["loggedin"] == true) {
 	
 	
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-//AddToDB //////////////////////////////////////
         $SQL = $connection->prepare('UPDATE article SET
         img = :img,
         title = :title,
@@ -46,23 +44,21 @@ if($_SESSION["loggedin"] == true) {
 		
 		
 if($SQL->execute()) {
-header("Location: view.php?id=$_POST[id]"); /* Redirect browser */
-}
-else {
-echo "Error in Insert";
-print_r($SQL->errorInfo());
-$SQL->debugDumpParams();
-var_dump($_POST);
-}
-
+    header("Location: view.php?id=$_POST[id]");
+} else {
+    echo "Error in Insert";
+    print_r($SQL->errorInfo());
+    $SQL->debugDumpParams();
+    var_dump($_POST);
 }
 
+}
+
 else {
-include 'header.php';
+    include 'header.php';
 
 
 $result = GetFromDBWithId($_GET['id'],$connection);
-//var_dump($result);
 ?>
 		<form method="POST" action="edit.php" enctype="multipart/form-data">
 		    <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?? ''; ?>"

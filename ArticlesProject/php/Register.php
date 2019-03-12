@@ -6,44 +6,39 @@ include 'header.php';
 $username_err = '';
 $password_err = '';
 
-// Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-    //foreach ($_POST as $key => $value) {
-        if (empty($_POST['username'])) {
-            $errorMessage = "You forgot to type Username";
+    if (empty($_POST['username'])) {
+        $errorMessage = "You forgot to type Username";
+        echo $errorMessage;
+    } else if (empty($_POST['password'])) {
+        $errorMessage = "You forgot to type Password";
+        echo $errorMessage;
+    } else if (empty($_POST['confirm_password'])) {
+        $errorMessage = "You forgot to confirm Password";
+        echo $errorMessage;
+    } else {
+        if ($_POST['password'] != $_POST['confirm_password']) {
+            $errorMessage = "Password does not match Confirm Password";
             echo $errorMessage;
-        } else if (empty($_POST['password'])) {
-            $errorMessage = "You forgot to type Password";
-            echo $errorMessage;
-        } else if (empty($_POST['confirm_password'])) {
-            $errorMessage = "You forgot to confirm Password";
-            echo $errorMessage;
+        } else {
+            $reader = "reader";
+            //FillIn SQL with the Bind params :USERNAME
+            $SQL = $connection->prepare('INSERT INTO users (username, password, role) VALUES (:USERNAME, :PASSWORD, :USERROLE)');
+            $password = $_POST['password'];
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $SQL->bindParam(':USERNAME', $_POST['username'], PDO::PARAM_STR);
+            $SQL->bindParam(':PASSWORD', $hash, PDO::PARAM_STR);
+            $SQL->bindParam(':USERROLE', $reader, PDO::PARAM_STR);
+            $SQL->execute();
+
+            session_start();
+            $_SESSION["loggedin"] = true;
+            $_SESSION['username'] = $_POST['username'];
+            $_SESSION['role'] = $reader;
+            header('Location: list.php');
         }
-            else {
-
-            if ($_POST['password'] != $_POST['confirm_password']) {
-                $errorMessage = "Password does not match Confirm Password";
-                echo $errorMessage;
-            } else {
-                $reader = "reader";
-                //FillIn SQL with the Bind params :USERNAME
-                $SQL = $connection->prepare('INSERT INTO users (username, password, role) VALUES (:USERNAME, :PASSWORD, :USERROLE)');
-                $password = $_POST['password'];
-                $hash = password_hash($password, PASSWORD_DEFAULT);
-                $SQL->bindParam(':USERNAME', $_POST['username'], PDO::PARAM_STR);
-                $SQL->bindParam(':PASSWORD', $hash, PDO::PARAM_STR);
-                $SQL->bindParam(':USERROLE', $reader, PDO::PARAM_STR);
-                $SQL->execute();
-
-                session_start();
-                $_SESSION["loggedin"] = true;
-                $_SESSION['username'] = $_POST['username'];
-                $_SESSION['role'] = $reader;
-                header('Location: list.php');
-            }
             include 'header.php';
-        }
-
+    }
 }
 ?>
 <body class="imgview" style="height: 1000px;" background="../storage/jpg.jpg">
